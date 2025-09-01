@@ -1,9 +1,16 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
+const cors = require('cors'); // <-- IMPORTANTE
 const { google } = require('googleapis');
 const fs = require('fs');
 
 const app = express();
+
+// Permitir peticiones solo desde tu dominio de Hostinger
+app.use(cors({
+  origin: 'https://amicscgb.com' // cambia si tu dominio es distinto
+}));
+
 app.use(fileUpload());
 
 const CREDENTIALS = JSON.parse(fs.readFileSync('service-account.json'));
@@ -15,7 +22,7 @@ const auth = new google.auth.GoogleAuth({
 const drive = google.drive({ version: 'v3', auth });
 
 // ID de la carpeta en tu Google Drive
-const FOLDER_ID = '1l0Ws3z1wZYXfZQOre91J6hQw7FxSgPxV';
+const FOLDER_ID = 'AQUI_EL_ID_DE_TU_CARPETA';
 
 app.post('/upload', async (req, res) => {
   try {
